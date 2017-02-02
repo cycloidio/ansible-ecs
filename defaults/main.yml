@@ -1,0 +1,46 @@
+# Config variables
+ecs_config: false
+ecs_detach: true
+ecs_state: started
+ecs_restart_policy: always
+ecs_version: latest
+ecs_network_mode: host
+ecs_volumes:
+  - /var/run/docker.sock:/var/run/docker.sock
+  - /var/log/ecs/:/log
+  - /var/lib/ecs/data:/data
+
+# Env variables based on https://github.com/aws/amazon-ecs-agent/blob/master/README.md
+ecs_cluster: default
+ecs_loglevel: info
+ecs_logfile: /log/ecs-agent.log
+ecs_reserved_ports: "[22, 2375, 2376, 51678, 51679]"
+ecs_docker_host: unix:///var/run/docker.sock
+ecs_datadir: /data/
+ecs_updates_enabled: false
+ecs_disable_metrics: false
+ecs_reserved_memory: 0
+ecs_disable_privileged: false
+ecs_selinux_capable: false
+ecs_apparmor_capable: false
+ecs_engine_task_cleanup_wait_duration: 3h
+ecs_container_stop_timeout: 30s
+ecs_enable_task_iam_role: true
+ecs_enable_task_iam_role_network_host: true
+ecs_disable_image_cleanup: false
+ecs_image_cleanup_interval: 30m
+ecs_image_minimum_cleanup_age: 1h
+ecs_num_images_delete_per_cycle: 5
+ecs_available_logging_drivers: [ "json-file", "syslog" ]
+
+# Possible other env variables but unused
+# ecs_engine_auth_type:
+# ecs_engine_auth_data:
+# aws_default_region:
+# aws_access_key_id:
+# aws_secret_access_key:
+# aws_session_token:
+# ecs_checkpoint:
+# ecs_update_download_dir:
+# ecs_instance_attributes: "[]"
+# ecs_reserved_ports_udp: "[]"

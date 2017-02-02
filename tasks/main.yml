@@ -1,0 +1,101 @@
+---
+
+- name: Install docker and extra packages
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - docker.io
+
+- name: Install latest version of pip
+  easy_install:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - pip
+
+- name: Install docker-py via pip
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - docker-py
+
+- name: Create conf, logs & libs directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  with_items:
+    - /var/log/ecs
+    - /etc/ecs
+    - /var/lib/ecs/data
+
+- name: Create empty ECS config file
+  copy:
+    content: "ECS_CLUSTER={{ ecs_cluster }}"
+    dest: /etc/ecs/ecs.config
+    owner: root
+    group: root
+    mode: 0644
+  when: ecs_config == true
+
+- name: Set route_localnet
+  sysctl:
+    name: net.ipv4.conf.all.route_localnet
+    value: 1
+    sysctl_set: yes
+
+- name: Setup port forwarding from 80 to 51679 for metadata (1)
+  iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    destination: 169.254.170.2
+    destination_port: 80
+    jump: DNAT
+    to_destination: 127.0.0.1:51679
+
+- name: Setup port forwarding from 80 to 51679 for metadata (2)
+  iptables:
+    table: nat
+    chain: OUTPUT
+    destination: 169.254.170.2
+    protocol: tcp
+    match: tcp
+    destination_port: 80
+    jump: REDIRECT
+    to_ports: 51679
+
+- name: Configure and run the ecs-agent container
+  docker_container:
+    name: ecs-agent
+    image: "amazon/amazon-ecs-agent:{{ ecs_version }}"
+    state: "{{ ecs_state }}"
+    restart_policy: "{{ ecs_restart_policy }}"
+    detach: "{{ ecs_detach }}"
+    network_mode: "{{ ecs_network_mode }}"
+    volumes: "{{ ecs_volumes }}"
+    env:
+      ECS_CLUSTER: "{{ ecs_cluster }}"
+      ECS_LOGLEVEL: "{{ ecs_loglevel }}"
+      ECS_LOGFILE: "{{ ecs_logfile }}"
+      ECS_RESERVED_PORTS: "{{ ecs_reserved_ports }}"
+      DOCKER_HOST: "{{ ecs_docker_host }}"
+      ECS_DATADIR: "{{ ecs_datadir }}"
+      ECS_UPDATES_ENABLED: "{{ ecs_updates_enabled }}"
+      ECS_DISABLE_METRICS: "{{ ecs_disable_metrics }}"
+      ECS_RESERVED_MEMORY: "{{ ecs_reserved_memory }}"
+      ECS_DISABLE_PRIVILEGED: "{{ ecs_disable_privileged }}"
+      ECS_SELINUX_CAPABLE: "{{ ecs_selinux_capable }}"
+      ECS_APPARMOR_CAPABLE: "{{ ecs_apparmor_capable }}"
+      ECS_ENGINE_TASK_CLEANUP_WAIT_DURATION: "{{ ecs_engine_task_cleanup_wait_duration }}"
+      ECS_CONTAINER_STOP_TIMEOUT: "{{ ecs_container_stop_timeout }}"
+      ECS_ENABLE_TASK_IAM_ROLE: "{{ ecs_enable_task_iam_role }}"
+      ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST: "{{ ecs_enable_task_iam_role_network_host }}"
+      ECS_DISABLE_IMAGE_CLEANUP: "{{ ecs_disable_image_cleanup }}"
+      ECS_IMAGE_CLEANUP_INTERVAL: "{{ ecs_image_cleanup_interval }}"
+      ECS_IMAGE_MINIMUM_CLEANUP_AGE: "{{ ecs_image_minimum_cleanup_age }}"
+      ECS_NUM_IMAGES_DELETE_PER_CYCLE: "{{ ecs_num_images_delete_per_cycle }}"
+      ECS_AVAILABLE_LOGGING_DRIVERS: "{{ ecs_available_logging_drivers }}"

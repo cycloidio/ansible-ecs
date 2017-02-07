@@ -1,11 +1,30 @@
 ---
-
-- name: Install docker and extra packages
+- name: Install packages to add docker repositories
   package:
     name: "{{ item }}"
     state: latest
   with_items:
-    - docker.io
+    - curl
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+
+- name: Add docker official keys
+  apt_key:
+    url: "https://yum.dockerproject.org/gpg"
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Add docker official repositories
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo/ debian-{{ ansible_distribution_release }} main" 
+    state: present
+
+- name: Install latest docker version and extra packages
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - docker-engine
 
 - name: Install latest version of pip
   easy_install:

@@ -1,4 +1,3 @@
-
 # ansible-ecs
 
 Ansible role to install ECS agent on servers

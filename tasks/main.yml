@@ -1,12 +1,5 @@
 ---
 
-- name: Install docker and extra packages
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - docker.io
-
 - name: Install latest version of pip
   easy_install:
     name: "{{ item }}"

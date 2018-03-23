@@ -2,6 +2,21 @@
 
 Ansible role to install ECS agent on servers
 
+## Prerequisites
+
+This role requires a host with docker-engine installed. 
+
+* [AWS amis](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
+* Vagrant
+  - [CentOS 7](https://atlas.hashicorp.com/dockpack/boxes/centos7)
+  - [Ubuntu 12.04](https://vagrantcloud.com/williamyeh/boxes/ubuntu-trusty64-docker)
+
+You also can install it via ansible for example with the following role :
+
+```
+    - {role: geerlingguy.docker, tags: docker}
+```
+
 ## Role Variables
 
 ### Custom variables

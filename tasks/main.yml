@@ -91,5 +91,5 @@
       ECS_IMAGE_CLEANUP_INTERVAL: "{{ ecs_image_cleanup_interval }}"
       ECS_IMAGE_MINIMUM_CLEANUP_AGE: "{{ ecs_image_minimum_cleanup_age }}"
       ECS_NUM_IMAGES_DELETE_PER_CYCLE: "{{ ecs_num_images_delete_per_cycle }}"
-      ECS_AVAILABLE_LOGGING_DRIVERS: "{{ ecs_available_logging_drivers }}"
-      ECS_INSTANCE_ATTRIBUTES: "{{ ecs_instance_attributes }}"
+      ECS_AVAILABLE_LOGGING_DRIVERS: "{{ ecs_available_logging_drivers | to_json }}"
+      ECS_INSTANCE_ATTRIBUTES: "{{ ecs_instance_attributes | to_json }}"

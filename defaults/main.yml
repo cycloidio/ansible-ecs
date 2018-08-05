@@ -31,7 +31,10 @@ ecs_disable_image_cleanup: false
 ecs_image_cleanup_interval: 30m
 ecs_image_minimum_cleanup_age: 1h
 ecs_num_images_delete_per_cycle: 5
-ecs_available_logging_drivers: [ "json-file", "syslog" ]
+ecs_available_logging_drivers:
+   - json-file
+   - syslog
+ecs_instance_attributes:
 
 # Possible other env variables but unused
 # ecs_engine_auth_type:
@@ -42,5 +45,4 @@ ecs_available_logging_drivers: [ "json-file", "syslog" ]
 # aws_session_token:
 # ecs_checkpoint:
 # ecs_update_download_dir:
-# ecs_instance_attributes: "[]"
 # ecs_reserved_ports_udp: "[]"

@@ -31,6 +31,8 @@ ecs_disable_image_cleanup: false
 ecs_image_cleanup_interval: 30m
 ecs_image_minimum_cleanup_age: 1h
 ecs_num_images_delete_per_cycle: 5
+ecs_enable_untracked_image_cleanup: true
+ecs_exclude_untracked_image: []
 ecs_available_logging_drivers:
    - json-file
    - syslog

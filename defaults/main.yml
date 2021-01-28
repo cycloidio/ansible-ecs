@@ -38,6 +38,8 @@ ecs_available_logging_drivers:
    - syslog
 ecs_instance_attributes:
 
+ecs_install_pip: true
+
 # Possible other env variables but unused
 # ecs_engine_auth_type:
 # ecs_engine_auth_data:

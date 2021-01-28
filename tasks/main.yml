@@ -6,6 +6,7 @@
     state: latest
   with_items:
     - pip
+  when: ecs_install_pip
 
 - name: Install docker-py via pip
   pip:

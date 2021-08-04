@@ -65,7 +65,7 @@
 - name: Configure and run the ecs-agent container
   docker_container:
     name: ecs-agent
-    image: "amazon/amazon-ecs-agent:{{ ecs_version }}"
+    image: "public.ecr.aws/ecs/amazon-ecs-agent:{{ ecs_version }}"
     state: "{{ ecs_state }}"
     restart_policy: "{{ ecs_restart_policy }}"
     detach: "{{ ecs_detach }}"
